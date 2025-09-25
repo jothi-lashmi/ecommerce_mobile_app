@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_project/injection.dart';
 import 'package:firebase_auth_project/presentation/core/router/app_router.dart';
 import 'package:firebase_auth_project/presentation/login/widget/forgot_password_widget.dart';
+import 'package:firebase_auth_project/presentation/login/widget/snackbar.dart';
 import 'package:firebase_auth_project/presentation/login/widget/text_field.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +39,13 @@ class _InputScreenState extends State<InputScreen> {
       try {
         await auth.signInWithEmailAndPassword(email: email, password: password);
         print('login success');
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Login Successful')));
+        showCustomSnackBar(context, 'Login Successful');
+        await Future.delayed(const Duration(milliseconds: 500));
+
         getIt<AppRouter>().replace(const HomeRoute());
       } catch (e) {
         print('this is failure,$e');
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        showCustomSnackBar(context, 'Error: $e', isError: true);
       }
     } else {
       debugPrint(
@@ -57,14 +56,11 @@ class _InputScreenState extends State<InputScreen> {
           email: email,
           password: password,
         );
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Account Created')));
+        showCustomSnackBar(context, 'Account Created Successfully');
+        await Future.delayed(const Duration(milliseconds: 500));
         getIt<AppRouter>().replace(const HomeRoute());
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        showCustomSnackBar(context, 'Error: $e', isError: true);
       }
     }
   }

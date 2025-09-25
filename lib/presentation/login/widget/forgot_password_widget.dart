@@ -1,9 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_project/presentation/login/widget/otp_verification_widget.dart';
 import 'package:firebase_auth_project/presentation/login/widget/text_field.dart';
 import 'package:flutter/material.dart';
 
-class ForgotPasswordWidget extends StatelessWidget {
+class ForgotPasswordWidget extends StatefulWidget {
   const ForgotPasswordWidget({super.key});
+
+  @override
+  State<ForgotPasswordWidget> createState() => _ForgotPasswordWidgetState();
+}
+
+class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
+  final TextEditingController emailController = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  void send() async {
+    final email = emailController.text.trim();
+    print('this is the mail $email');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +68,11 @@ class ForgotPasswordWidget extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[700], fontSize: 14),
                 ),
                 SizedBox(height: 20),
-                // BuildTextField(label: 'Email', icon: Icons.email),
+                BuildTextField(
+                  label: 'Email',
+                  icon: Icons.email,
+                  controller: emailController,
+                ),
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -61,17 +85,18 @@ class ForgotPasswordWidget extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // handle submit
+                        send();
                         Navigator.pop(context);
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
-                          builder: (context) => const OtpVerificationWidget(),
-                        );
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   isScrollControlled: true,
+                        //   shape: RoundedRectangleBorder(
+                        //     borderRadius: BorderRadius.vertical(
+                        //       top: Radius.circular(20),
+                        //     ),
+                        //   ),
+                        //   builder: (context) => const OtpVerificationWidget(),
+                        // );
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
